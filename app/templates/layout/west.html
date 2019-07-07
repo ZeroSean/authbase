@@ -1,0 +1,94 @@
+<script type="text/javascript">
+	var layout_west_tree;
+	var layout_west_tree_url = '';
+
+	//if (sessionInfo_userId) {
+		layout_west_tree_url = '/base/syresource!doNotNeedSecurity_getMainMenu.action';
+	//}
+	$.ajax({
+	    url:layout_west_tree_url,
+	    type:'post',
+	    async: true,
+	    dataType:'json',
+	    success:function(data){
+	    	var j = 0;
+	    	$.each(data, function(index, node){
+	    		if (node.pid) {
+
+	    		}else{
+	    			addParentItem(node, j++);
+	    		}
+	    	});
+
+	    	/* 从后往前遍历 */
+	    	$.each(data, function(index, node){
+	    		if (node.pid){
+	    			addMenuItem(node);
+	    		}
+	    	});
+	    }
+	});
+
+	function addMenuItem(node) {
+        var item = $('<li><a href="#"><span class="' + node.iconCls
+				+ '" style="width:18px;height:18px;display:inline-block;padding-right:5px;vertical-align:middle;"/>'
+				+ node.text + '</a></li>')
+            .appendTo($('#' + node.pid));
+
+        $(item).click(function() {
+            onItemClick(node);
+        });
+    }
+
+	function addParentItem(node, j){
+		var inOrEmpty = "";
+		var collapsed = "collapsed";
+		if (j == 0) {
+			inOrEmpty = "in";
+			collapsed = "";
+		}
+
+		$('<a href="#' + node.id + '" class="nav-header ' + collapsed + '" data-toggle="collapse"><span class="' + node.iconCls
+				+ '" style="width:18px;height:18px;display:inline-block;padding-right:5px;vertical-align:middle;"/>'
+				+ node.text + '<i class="icon-chevron-up"></i></a>'
+				+ '<ul id="' + node.id + '" class="nav nav-list collapse ' + inOrEmpty + '"></ul>').appendTo($('#main-nav'));
+	}
+
+    function onItemClick(node) {
+        if (node.attributes.url) {
+            var url = node.attributes.url;
+            if (node.attributes.url.indexOf('/') == 0) {/*如果url第一位字符是"/"，那么代表打开的是本地的资源*/
+                url = node.attributes.url;
+            }
+
+            addTab({
+                url : url,
+                title : node.text,
+                iconCls : node.iconCls
+            });
+        }
+    }
+
+    function addTab(params) {
+        var iframe = '<iframe src="' + params.url + '" frameborder="0" style="border:0;width:100%;height:98%;"></iframe>';
+        var t = $('#mainTabs');
+        var opts = {
+            title : params.title,
+            closable : true,
+            iconCls : params.iconCls,
+            content : iframe,
+            border : false,
+            fit : true
+        };
+        if (t.tabs('exists', opts.title)) {
+            t.tabs('select', opts.title);
+            parent.$.messager.progress('close');
+        } else {
+            t.tabs('add', opts);
+        }
+    }
+</script>
+
+   <div class="sidebar-nav" id="main-nav">
+
+   </div>

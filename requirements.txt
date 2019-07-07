@@ -1,0 +1,12 @@
+Flask==0.11.1
+Flask-Bootstrap==3.3.7.0
+Flask-Mail==0.9.1
+Flask-Migrate==2.0.0
+Flask-Script==2.0.5
+Flask-SQLAlchemy==2.1
+Flask-Login
+Flask-moment
+itsdangerous==0.24
+Jinja2==2.8
+Werkzeug==0.13
+MySQL-Connector

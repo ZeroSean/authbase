@@ -1,0 +1,16 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        {% block title %} flask {%  endblock %}
+    </title>
+
+    {% include 'inc.html' %}
+
+    {% block head %}
+    {% endblock %}
+</head>
+
+{% block body %} {% endblock %}
+</html>
